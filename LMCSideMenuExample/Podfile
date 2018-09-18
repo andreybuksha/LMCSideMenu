@@ -1,0 +1,7 @@
+target 'LMCSideMenuExample' do
+
+  use_frameworks!
+
+  pod 'LMCSideMenu'
+
+end

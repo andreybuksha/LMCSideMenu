@@ -1,0 +1,6 @@
+framework module LMCSideMenu {
+  umbrella header "LMCSideMenu-umbrella.h"
+
+  export *
+  module * { export * }
+}

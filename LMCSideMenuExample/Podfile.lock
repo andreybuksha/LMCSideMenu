@@ -1,0 +1,16 @@
+PODS:
+  - LMCSideMenu (0.0.2)
+
+DEPENDENCIES:
+  - LMCSideMenu
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - LMCSideMenu
+
+SPEC CHECKSUMS:
+  LMCSideMenu: d92c7f39f368b10212a7bf9d6433275beeafb806
+
+PODFILE CHECKSUM: 077312975594d81feadcb6fbee5eef08260fa51e
+
+COCOAPODS: 1.5.0
