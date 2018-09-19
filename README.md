@@ -40,5 +40,12 @@ enableLeftMenuGesture()
 enableRightMenuGesture()
 ```
 
+## Customizing
+If you need to customize the appearance properties of menu, such as menuWidth, gesture percent threshold or animationDuration, call these methods:
+```
+MenuHelper.set(menuWidth: newMenuWidth)
+MenuHelper.set(percentThreshold: newPercentThreshold)
+MenuHelper.set(animationDuration: newAnimationDuration)
+```
 
 
