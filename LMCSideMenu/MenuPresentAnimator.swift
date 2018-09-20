@@ -23,9 +23,6 @@ class MenuPresentAnimator: NSObject {
 extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        MenuHelper.set(menuWidth: 0.5)
-        MenuHelper.set(percentThreshold: 0.1)
-        MenuHelper.set(animationDuration: 0.2)
         return MenuHelper.animationDuration
     }
     
