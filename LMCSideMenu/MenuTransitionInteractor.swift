@@ -25,7 +25,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
         super.init()
     }
     
-    func addTapView(to containerView: UIView, wtih frame: CGRect) {
+    internal func addTapView(to containerView: UIView, wtih frame: CGRect) {
         let tapView = UIView(frame: frame)
         containerView.addSubview(tapView)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -56,7 +56,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
        handlePresentPan(direction: .left, sender: sender)
     }
     
-    func removeTapView() {
+    internal func removeTapView() {
         tapView?.removeFromSuperview()
     }
     

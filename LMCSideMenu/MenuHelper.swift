@@ -22,7 +22,7 @@ public enum SideMenuPosition {
 }
 
 
-struct MenuHelper {
+public struct MenuHelper {
     
     /// Width of the side menu related to the width of the center view controller's view. Values are in range 0.0 - 1.0, where 0.0 is zero width and 1.0 is the width equal to the width of the view. Default is 0.8.
     internal static var menuWidth: CGFloat = LMCMenuConstants.menuWidth
@@ -33,8 +33,8 @@ struct MenuHelper {
     /// The duration of transition animation in seconds. Default is 0.3.
     internal static var animationDuration: TimeInterval = LMCMenuConstants.animationDuration
     
-    static let presentingSnapshotTag = 123456
-    static let menuSnapshotTag = 654321
+    internal static let presentingSnapshotTag = 123456
+    internal static let menuSnapshotTag = 654321
     
     public static let menuDidShowNotification = NSNotification.Name("LMC_SIDE_MENU_DID_SHOW_NOTIFICATION")
     public static let menuDidHideNotification = NSNotification.Name("LMC_SIDE_MENU_DID_HIDE_NOTIFICATION")
@@ -52,7 +52,7 @@ struct MenuHelper {
         MenuHelper.animationDuration = animationDuration
     }
     
-    static func calculateProgress(translationInView: CGPoint, viewBounds: CGRect, direction: MenuPanDirection) -> CGFloat {
+    internal static func calculateProgress(translationInView: CGPoint, viewBounds: CGRect, direction: MenuPanDirection) -> CGFloat {
         
         let pointOnAxis: CGFloat
         let axisLength: CGFloat
@@ -82,7 +82,7 @@ struct MenuHelper {
         }
     }
     
-    static func map(gestureState: UIGestureRecognizer.State, to interactor: MenuTransitionInteractor?, progress: CGFloat, direction: MenuPanDirection, triggerAction: () -> ()) {
+    internal static func map(gestureState: UIGestureRecognizer.State, to interactor: MenuTransitionInteractor?, progress: CGFloat, direction: MenuPanDirection, triggerAction: () -> ()) {
         guard let interactor = interactor else { return }
         switch gestureState {
         case .began:
