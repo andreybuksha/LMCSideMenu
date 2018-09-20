@@ -40,15 +40,15 @@ public struct MenuHelper {
     public static let menuDidHideNotification = NSNotification.Name("LMC_SIDE_MENU_DID_HIDE_NOTIFICATION")
     
     
-    static func set(menuWidth: CGFloat) {
+    public static func set(menuWidth: CGFloat) {
         MenuHelper.menuWidth = menuWidth
     }
     
-    static func set(percentThreshold: CGFloat) {
+    public static func set(percentThreshold: CGFloat) {
         MenuHelper.percentThreshold = percentThreshold
     }
     
-    static func set(animationDuration: TimeInterval) {
+    public static func set(animationDuration: TimeInterval) {
         MenuHelper.animationDuration = animationDuration
     }
     
