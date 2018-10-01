@@ -40,6 +40,14 @@ enableLeftMenuGesture()
 enableRightMenuGesture()
 ```
 
+If your app supports multiple orientations, add this code into your center view controller:
+```
+override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator)
+    transitionMenu(to: size, coordinator: coordinator)
+}
+```
+
 ## Customizing
 If you need to customize the appearance properties of menu, such as menuWidth, gesture percent threshold or animationDuration, call these methods:
 ```

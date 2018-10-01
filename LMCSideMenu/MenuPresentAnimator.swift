@@ -41,7 +41,7 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         
         let containerView = transitionContext.containerView
         
-        toVc.view.frame.size.width = containerView.frame.width * MenuHelper.menuWidth
+        toVc.view.frame.size = CGSize(width: containerView.frame.width * MenuHelper.menuWidth, height: containerView.frame.height)
         if interactor.menuPosition == .right {
             toVc.view.frame.origin.x = containerView.frame.width - toVc.view.frame.width
         }
@@ -63,10 +63,11 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         containerView.insertSubview(toVc.view, aboveSubview: snapshot)
         
         var tapViewFrame: CGRect
+        let tapViewWidth = containerView.frame.width - toVc.view.frame.width
         if interactor.menuPosition == .left {
-            tapViewFrame = CGRect(x: toVc.view.frame.maxX, y: toVc.view.frame.minY, width: toVc.view.frame.width, height: toVc.view.frame.height)
+            tapViewFrame = CGRect(x: toVc.view.frame.maxX, y: toVc.view.frame.minY, width: tapViewWidth, height: toVc.view.frame.height)
         } else {
-            tapViewFrame = CGRect(x: toVc.view.frame.minX - toVc.view.frame.width, y: toVc.view.frame.minY, width: toVc.view.frame.width, height: toVc.view.frame.height)
+            tapViewFrame = CGRect(x: toVc.view.frame.minX - toVc.view.frame.width, y: toVc.view.frame.minY, width: tapViewWidth, height: toVc.view.frame.height)
         }
         
         interactor.addTapView(to: containerView, wtih: tapViewFrame)

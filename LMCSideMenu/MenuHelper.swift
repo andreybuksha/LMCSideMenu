@@ -35,6 +35,7 @@ public struct MenuHelper {
     
     internal static let presentingSnapshotTag = 123456
     internal static let menuSnapshotTag = 654321
+    internal static let blurViewTag = 223344
     
     public static let menuDidShowNotification = NSNotification.Name("LMC_SIDE_MENU_DID_SHOW_NOTIFICATION")
     public static let menuDidHideNotification = NSNotification.Name("LMC_SIDE_MENU_DID_HIDE_NOTIFICATION")

@@ -79,4 +79,13 @@ public extension LMCSideMenuCenterControllerProtocol {
         }
     }
     
+    func transitionMenu(to size: CGSize, coordinator: UIViewControllerTransitionCoordinator) {
+        interactor.prepareForAdjustement()
+        coordinator.animate(alongsideTransition: { [weak self] context in
+            self?.interactor.adjustMenu(to: size)
+        }) { [weak self] context in
+            self?.interactor.completeAdjusting(to: size)
+        }
+    }
+    
 }
