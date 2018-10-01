@@ -67,7 +67,7 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         if interactor.menuPosition == .left {
             tapViewFrame = CGRect(x: toVc.view.frame.maxX, y: toVc.view.frame.minY, width: tapViewWidth, height: toVc.view.frame.height)
         } else {
-            tapViewFrame = CGRect(x: toVc.view.frame.minX - toVc.view.frame.width, y: toVc.view.frame.minY, width: tapViewWidth, height: toVc.view.frame.height)
+            tapViewFrame = CGRect(x: 0, y: 0, width: tapViewWidth, height: toVc.view.frame.height)
         }
         
         interactor.addTapView(to: containerView, wtih: tapViewFrame)

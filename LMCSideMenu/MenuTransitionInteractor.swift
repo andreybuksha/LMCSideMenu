@@ -19,6 +19,10 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     
     var menuPosition: SideMenuPosition = .left
     
+    public var shouldAdjustmenu: Bool {
+        return leftMenuController?.viewIfLoaded?.window != nil || rightMenuController?.viewIfLoaded?.window != nil
+    }
+    
     private weak var tapView: UIView?
     
     override public init() {
@@ -102,8 +106,6 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
         tapView.frame = tapViewFrame
         blurView?.frame = tapViewFrame
         
-        centerController?.view.frame.size = size
-        
         if menuPosition == .right {
             menuView.frame.origin.x = size.width - menuView.frame.width
         }
@@ -111,6 +113,8 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     }
     
     internal func completeAdjusting(to size: CGSize) {
+        
+        centerController?.view.frame.size = size
 
         guard let tapView = self.tapView else { return }
         guard let containerView = tapView.superview else { return }
