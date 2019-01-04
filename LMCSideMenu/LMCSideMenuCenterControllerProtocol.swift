@@ -54,7 +54,11 @@ public extension LMCSideMenuCenterControllerProtocol {
         interactor.centerController = self
         
         leftMenu?.transitioningDelegate = interactor
+        leftMenu?.modalPresentationStyle = .custom
+        leftMenu?.modalPresentationCapturesStatusBarAppearance = true
         rightMenu?.transitioningDelegate = interactor
+        rightMenu?.modalPresentationStyle = .custom
+        rightMenu?.modalPresentationCapturesStatusBarAppearance = true
     }
     
     func enableLeftMenuGesture() {

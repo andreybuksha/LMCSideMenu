@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LMCSideMenu"
-  s.version      = "0.0.8"
+  s.version      = "0.0.9"
   s.summary      = "Simple and lightweight side menu written in Swift"
   s.description  = "LMCSideMenu allows to create fully customizable side menu (left and right) with support of gestures"
   s.homepage     = "https://github.com/andreybuksha/LMCSideMenu"

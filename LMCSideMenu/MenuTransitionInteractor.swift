@@ -27,6 +27,12 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     
     override public init() {
         super.init()
+        setupObservers()
+    }
+    
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(statusBarFrameChanged(notification:)), name: UIApplication.didChangeStatusBarFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(statusBarFrameChanged(notification:)), name: UIApplication.willChangeStatusBarFrameNotification, object: nil)
     }
     
     internal func addTapView(to containerView: UIView, wtih frame: CGRect) {
@@ -109,11 +115,23 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
         if menuPosition == .right {
             menuView.frame.origin.x = size.width - menuView.frame.width
         }
+    }
+    
+    internal func adjustMenu(statusBarHeightDiff: CGFloat) {
+        var presentedMenuView: UIView?
+        if leftMenuController?.viewIfLoaded?.window != nil {
+            presentedMenuView = leftMenuController?.view
+        } else if rightMenuController?.viewIfLoaded?.window != nil {
+            presentedMenuView = rightMenuController?.view
+        }
+        guard let menuView = presentedMenuView else { return }
         
+        menuView.frame.size.height -= statusBarHeightDiff
+        menuView.frame.origin.y += statusBarHeightDiff
+        menuView.layoutIfNeeded()
     }
     
     internal func completeAdjusting(to size: CGSize) {
-        
         centerController?.view.frame.size = size
 
         guard let tapView = self.tapView else { return }
@@ -149,6 +167,14 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
        handlePresentPan(direction: .left, sender: sender)
     }
     
+    @objc func statusBarFrameChanged(notification: NSNotification) {
+        if let oldRect = notification.userInfo?[UIApplication.statusBarFrameUserInfoKey] as? CGRect {
+            let heightDiff = UIApplication.shared.statusBarFrame.height - oldRect.height
+            guard heightDiff != 0 else { return }
+            adjustMenu(statusBarHeightDiff: heightDiff)
+        }
+    }
+    
     internal func removeTapView() {
         tapView?.removeFromSuperview()
     }
@@ -162,7 +188,6 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     }
     
     private func handlePresentPan(direction: MenuPanDirection, sender: UIScreenEdgePanGestureRecognizer) {
-        
         guard let view = sender.view else { return }
         
         let translation = sender.translation(in: view)
