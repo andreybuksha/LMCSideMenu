@@ -41,7 +41,7 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         
         let containerView = transitionContext.containerView
         
-        toVc.view.frame.size = CGSize(width: containerView.frame.width * MenuHelper.menuWidth, height: containerView.frame.height)
+        toVc.view.frame.size = CGSize(width: (containerView.frame.width * MenuHelper.menuWidth).rounded(), height: containerView.frame.height)
         if interactor.menuPosition == .right {
             toVc.view.frame.origin.x = containerView.frame.width - toVc.view.frame.width
         }
