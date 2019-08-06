@@ -15,7 +15,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     var leftMenuController: UIViewController?
     var rightMenuController: UIViewController?
 
-    var centerController: (UIViewController & LMCSideMenuCenterControllerProtocol)?
+    weak var centerController: (UIViewController & LMCSideMenuCenterControllerProtocol)?
 
     var menuPosition: SideMenuPosition = .left
 
