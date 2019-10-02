@@ -34,6 +34,7 @@ public struct MenuHelper {
     internal static var animationDuration: TimeInterval = LMCMenuConstants.animationDuration
     
     internal static let presentingSnapshotTag = 123456
+    internal static let overlayViewTag = 789456
     internal static let menuSnapshotTag = 654321
     internal static let blurViewTag = 223344
     

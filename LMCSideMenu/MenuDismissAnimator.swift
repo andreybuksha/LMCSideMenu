@@ -41,7 +41,7 @@ extension MenuDismissAnimator: UIViewControllerAnimatedTransitioning {
         let containerView = transitionContext.containerView
         
         guard let presentingSnapshot = containerView.viewWithTag(MenuHelper.presentingSnapshotTag) else { fatalError() }
-        let overlayView = presentingSnapshot.subviews.first
+        let overlayView = presentingSnapshot.viewWithTag(MenuHelper.overlayViewTag)
         guard let snapshot = fromVC.view.snapshotView(afterScreenUpdates: false) else { fatalError() }
         if interactor.menuPosition == .right {
             snapshot.frame.origin.x = containerView.frame.width - snapshot.frame.width

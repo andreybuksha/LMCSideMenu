@@ -49,12 +49,16 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         guard let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: false) else { fatalError() }
         guard let snapshot = toVc.view.snapshotView(afterScreenUpdates: true) else { fatalError() }
         
-        fromSnapshot.tag = MenuHelper.presentingSnapshotTag
+        let snapshotContainerView = UIView(frame: containerView.bounds)
+        snapshotContainerView.tag = MenuHelper.presentingSnapshotTag
+        fromSnapshot.frame.origin.y = snapshotContainerView.frame.height - fromSnapshot.frame.height
+        snapshotContainerView.addSubview(fromSnapshot)
         
-        containerView.addSubview(fromSnapshot)
+        containerView.addSubview(snapshotContainerView)
         
-        let overlayView = createOverlayView(with: fromSnapshot.bounds)
-        fromSnapshot.addSubview(overlayView)
+        let overlayView = createOverlayView(with: snapshotContainerView.bounds)
+        overlayView.tag = MenuHelper.overlayViewTag
+        snapshotContainerView.addSubview(overlayView)
         
         snapshot.tag = MenuHelper.menuSnapshotTag
         snapshot.frame.origin.x = interactor.menuPosition == .left ? -snapshot.frame.width : containerView.frame.width
@@ -75,7 +79,7 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), timingParameters: UICubicTimingParameters(animationCurve: .linear))
         animator.addAnimations { [weak self] in
             snapshot.frame.origin.x = self?.interactor.menuPosition == .left ? 0 : containerView.frame.width - toVc.view.frame.width
-            fromSnapshot.frame.origin.x = self?.interactor.menuPosition == .left ? snapshot.frame.width : -snapshot.frame.width
+            snapshotContainerView.frame.origin.x = self?.interactor.menuPosition == .left ? snapshot.frame.width : -snapshot.frame.width
             overlayView.alpha = 1
         }
         animator.addCompletion { _ in
