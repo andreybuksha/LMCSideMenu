@@ -39,20 +39,27 @@ extension MenuDismissAnimator: UIViewControllerAnimatedTransitioning {
         guard let fromVC = transitionContext.viewController(forKey: .from) else { fatalError() }
         
         let containerView = transitionContext.containerView
+        let contextView = interactor.presentationContextController?.view ?? containerView
         
-        guard let presentingSnapshot = containerView.viewWithTag(MenuHelper.presentingSnapshotTag) else { fatalError() }
+        guard let presentingSnapshot = contextView.viewWithTag(MenuHelper.presentingSnapshotTag) else { fatalError() }
         let overlayView = presentingSnapshot.viewWithTag(MenuHelper.overlayViewTag)
         guard let snapshot = fromVC.view.snapshotView(afterScreenUpdates: false) else { fatalError() }
         if interactor.menuPosition == .right {
-            snapshot.frame.origin.x = containerView.frame.width - snapshot.frame.width
+            snapshot.frame.origin.x = contextView.frame.width - snapshot.frame.width
         }
         
-        containerView.insertSubview(snapshot, aboveSubview: fromVC.view)
+        contextView.addSubview(snapshot)
         fromVC.view.isHidden = true
         
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), timingParameters: UICubicTimingParameters(animationCurve: .linear))
         animator.addAnimations { [weak self] in
-            snapshot.frame.origin.x = self?.interactor.menuPosition == .left ? -snapshot.frame.width : containerView.frame.width
+            guard let self = self else { return }
+            switch self.interactor.menuPosition {
+            case .left:
+                snapshot.frame.origin.x = -snapshot.frame.width
+            case .right:
+                snapshot.frame.origin.x = contextView.frame.width
+            }
             presentingSnapshot.frame.origin.x = 0
             overlayView?.alpha = 0
         }

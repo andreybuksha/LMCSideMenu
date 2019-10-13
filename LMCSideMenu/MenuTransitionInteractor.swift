@@ -16,10 +16,11 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     var rightMenuController: UIViewController?
 
     weak var centerController: (UIViewController & LMCSideMenuCenterControllerProtocol)?
+    internal weak var presentationContextController: UIViewController?
 
     var menuPosition: SideMenuPosition = .left
 
-    public var shouldAdjustmenu: Bool {
+    private var shouldDismissMenu: Bool {
         return leftMenuController?.viewIfLoaded?.window != nil || rightMenuController?.viewIfLoaded?.window != nil
     }
 
@@ -41,6 +42,15 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     override public init() {
         super.init()
         setupObservers()
+    }
+    
+    func dismissMenu() {
+        guard shouldDismissMenu else { return }
+        if menuPosition == .left {
+            leftMenuController?.dismiss(animated: true)
+        } else {
+            rightMenuController?.dismiss(animated: true)
+        }
     }
 
     private func setupObservers() {
@@ -185,11 +195,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     }
 
     @objc func statusBarFrameChanged(notification: NSNotification) {
-        if let oldRect = notification.userInfo?[UIApplication.statusBarFrameUserInfoKey] as? CGRect {
-            let heightDiff = UIApplication.shared.statusBarFrame.height - oldRect.height
-            guard heightDiff != 0 else { return }
-            adjustMenu(statusBarHeightDiff: heightDiff)
-        }
+        dismissMenu()
     }
 
     internal func removeTapView() {
@@ -197,11 +203,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     }
 
     @objc private func handleTap() {
-        if menuPosition == .left {
-            leftMenuController?.dismiss(animated: true)
-        } else {
-            rightMenuController?.dismiss(animated: true)
-        }
+        dismissMenu()
     }
 
     private func handlePresentPan(direction: MenuPanDirection, sender: UIScreenEdgePanGestureRecognizer) {

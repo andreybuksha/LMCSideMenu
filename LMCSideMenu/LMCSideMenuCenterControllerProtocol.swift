@@ -22,6 +22,8 @@ public protocol LMCSideMenuCenterControllerProtocol where Self: UIViewController
     ///   - leftMenu: The View Controller to be used as a left menu. Pass nil to disable left menu
     ///   - rightMenu: The View Controller to be used as a right menu. Pass nil to disable right menu
     func setupMenu(leftMenu: UIViewController?, rightMenu: UIViewController?)
+    
+    func set(presentationContextController: UIViewController?)
 
 
     /// Presents left menu. Call this method when you need to present left menu programmatically, for example, on menu button tap.
@@ -57,6 +59,11 @@ public protocol LMCSideMenuCenterControllerProtocol where Self: UIViewController
      You may provide custom implementation to this method to override default UIScreenEdgePanGestureRecognizer setup.
      */
     func disableRightMenuGesture()
+    
+    /**
+            Call this method when view controller's view is about to change. Typically it is should be called from method viewWillTransition(to:with:)
+     */
+    func onViewSizeChange()
 }
 
 public extension LMCSideMenuCenterControllerProtocol {
@@ -73,6 +80,10 @@ public extension LMCSideMenuCenterControllerProtocol {
         rightMenu?.transitioningDelegate = interactor
         rightMenu?.modalPresentationStyle = .custom
         rightMenu?.modalPresentationCapturesStatusBarAppearance = true
+    }
+    
+    func set(presentationContextController: UIViewController?) {
+        interactor.presentationContextController = presentationContextController
     }
 
     func enableLeftMenuGesture() {
@@ -104,15 +115,9 @@ public extension LMCSideMenuCenterControllerProtocol {
             present(rightMenu, animated: true)
         }
     }
-
-    func transitionMenu(to size: CGSize, coordinator: UIViewControllerTransitionCoordinator) {
-        guard interactor.shouldAdjustmenu else { return }
-        interactor.prepareForAdjustement()
-        coordinator.animate(alongsideTransition: { [weak self] context in
-            self?.interactor.adjustMenu(to: size)
-        }) { [weak self] context in
-            self?.interactor.completeAdjusting(to: size)
-        }
+    
+    func onViewSizeChange() {
+        interactor.dismissMenu()
     }
 
 }

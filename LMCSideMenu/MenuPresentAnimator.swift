@@ -41,30 +41,47 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         
         let containerView = transitionContext.containerView
         
-        toVc.view.frame.size = CGSize(width: (containerView.frame.width * MenuHelper.menuWidth).rounded(), height: containerView.frame.height)
-        if interactor.menuPosition == .right {
-            toVc.view.frame.origin.x = containerView.frame.width - toVc.view.frame.width
-        }
+        let contextView = interactor.presentationContextController?.view ?? containerView
         
+        let convertedFrame = contextView.convert(contextView.bounds, to: containerView)
+        
+        toVc.view.frame.size = CGSize(width: (contextView.frame.width * MenuHelper.menuWidth).rounded(), height: contextView.frame.height)
+                
         guard let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: false) else { fatalError() }
         guard let snapshot = toVc.view.snapshotView(afterScreenUpdates: true) else { fatalError() }
         
-        let snapshotContainerView = UIView(frame: containerView.bounds)
-        snapshotContainerView.tag = MenuHelper.presentingSnapshotTag
-        fromSnapshot.frame.origin.y = snapshotContainerView.frame.height - fromSnapshot.frame.height
-        snapshotContainerView.addSubview(fromSnapshot)
+        fromSnapshot.tag = MenuHelper.presentingSnapshotTag
         
-        containerView.addSubview(snapshotContainerView)
+        contextView.addSubview(fromSnapshot)
+        contextView.addSubview(snapshot)
         
-        let overlayView = createOverlayView(with: snapshotContainerView.bounds)
+        let overlayView = createOverlayView(with: fromSnapshot.bounds)
         overlayView.tag = MenuHelper.overlayViewTag
-        snapshotContainerView.addSubview(overlayView)
+        fromSnapshot.addSubview(overlayView)
         
-        snapshot.tag = MenuHelper.menuSnapshotTag
-        snapshot.frame.origin.x = interactor.menuPosition == .left ? -snapshot.frame.width : containerView.frame.width
-        containerView.addSubview(snapshot)
+        toVc.view.frame.origin.y = convertedFrame.minY
+        switch interactor.menuPosition {
+        case .left:
+            toVc.view.frame.origin.x = convertedFrame.minX
+            snapshot.frame.origin.x = -toVc.view.frame.width
+            
+        case .right:
+            toVc.view.frame.origin.x = convertedFrame.maxX - toVc.view.frame.width
+            snapshot.frame.origin.x = contextView.frame.width
+        }
         toVc.view.isHidden = true
-        containerView.insertSubview(toVc.view, aboveSubview: snapshot)
+        if let superview = toVc.presentingViewController?.view.superview {
+            if #available(iOS 13, *) {
+                switch interactor.menuPosition {
+                case .left:
+                    toVc.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+                case .right:
+                    toVc.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+                }
+            }
+            toVc.view.layer.cornerRadius = superview.layer.cornerRadius
+        }
+        containerView.addSubview(toVc.view)
         
         var tapViewFrame: CGRect
         let tapViewWidth = containerView.frame.width - toVc.view.frame.width
@@ -78,8 +95,15 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         
         let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), timingParameters: UICubicTimingParameters(animationCurve: .linear))
         animator.addAnimations { [weak self] in
-            snapshot.frame.origin.x = self?.interactor.menuPosition == .left ? 0 : containerView.frame.width - toVc.view.frame.width
-            snapshotContainerView.frame.origin.x = self?.interactor.menuPosition == .left ? snapshot.frame.width : -snapshot.frame.width
+            guard let self = self else { return }
+            switch self.interactor.menuPosition {
+            case .left:
+                snapshot.frame.origin.x = 0
+                fromSnapshot.frame.origin.x = snapshot.frame.maxX
+            case .right:
+                snapshot.frame.origin.x = contextView.frame.width - toVc.view.frame.width
+                fromSnapshot.frame.origin.x = -snapshot.frame.width
+            }
             overlayView.alpha = 1
         }
         animator.addCompletion { _ in
