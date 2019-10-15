@@ -15,6 +15,8 @@ public protocol LMCSideMenuCenterControllerProtocol where Self: UIViewController
     /// MenuTransitionInteractor object that manages all transitions of menu controllers.
     var interactor: MenuTransitionInteractor { get set }
 
+    /// Width of the side menu related to the width of the center view controller's view. Override this property if you want to set custom width on specific center controller ignoring general menuWidth property. Values are in range 0.0 - 1.0, where 0.0 is zero width and 1.0 is the width equal to the width of the view. Default is 0.8.
+    var menuWidth: CGFloat { get }
 
     /// Sets up Side menu with provided leftMenu and rightMenu
     ///
@@ -67,6 +69,10 @@ public protocol LMCSideMenuCenterControllerProtocol where Self: UIViewController
 }
 
 public extension LMCSideMenuCenterControllerProtocol {
+    
+    var menuWidth: CGFloat {
+        return MenuHelper.menuWidth
+    }
 
     func setupMenu(leftMenu: UIViewController?, rightMenu: UIViewController?) {
         interactor.leftMenuController = leftMenu
@@ -104,6 +110,7 @@ public extension LMCSideMenuCenterControllerProtocol {
 
     func presentLeftMenu() {
         if let leftMenu = interactor.leftMenuController {
+            interactor.menuWidth = menuWidth
             interactor.menuPosition = .left
             present(leftMenu, animated: true)
         }
@@ -111,6 +118,7 @@ public extension LMCSideMenuCenterControllerProtocol {
 
     func presentRightMenu() {
         if let rightMenu = interactor.rightMenuController {
+            interactor.menuWidth = menuWidth
             interactor.menuPosition = .right
             present(rightMenu, animated: true)
         }

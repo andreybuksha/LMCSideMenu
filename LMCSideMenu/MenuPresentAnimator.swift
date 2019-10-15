@@ -45,7 +45,8 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         
         let convertedFrame = contextView.convert(contextView.bounds, to: containerView)
         
-        toVc.view.frame.size = CGSize(width: (contextView.frame.width * MenuHelper.menuWidth).rounded(), height: contextView.frame.height)
+        toVc.view.frame.size = CGSize(width: (contextView.frame.width * interactor.menuWidth).rounded(),
+                                      height: contextView.frame.height)
                 
         guard let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: false) else { fatalError() }
         guard let snapshot = toVc.view.snapshotView(afterScreenUpdates: true) else { fatalError() }
@@ -79,6 +80,7 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
                     toVc.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
                 }
             }
+            toVc.view.clipsToBounds = true
             toVc.view.layer.cornerRadius = superview.layer.cornerRadius
         }
         containerView.addSubview(toVc.view)
@@ -86,14 +88,18 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
         var tapViewFrame: CGRect
         let tapViewWidth = containerView.frame.width - toVc.view.frame.width
         if interactor.menuPosition == .left {
-            tapViewFrame = CGRect(x: toVc.view.frame.maxX, y: toVc.view.frame.minY, width: tapViewWidth, height: toVc.view.frame.height)
+            tapViewFrame = CGRect(x: toVc.view.frame.maxX,
+                                  y: toVc.view.frame.minY,
+                                  width: tapViewWidth,
+                                  height: toVc.view.frame.height)
         } else {
             tapViewFrame = CGRect(x: 0, y: 0, width: tapViewWidth, height: toVc.view.frame.height)
         }
         
         interactor.addTapView(to: containerView, wtih: tapViewFrame)
         
-        let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext), timingParameters: UICubicTimingParameters(animationCurve: .linear))
+        let animator = UIViewPropertyAnimator(duration: transitionDuration(using: transitionContext),
+                                              timingParameters: UICubicTimingParameters(animationCurve: .linear))
         animator.addAnimations { [weak self] in
             guard let self = self else { return }
             switch self.interactor.menuPosition {

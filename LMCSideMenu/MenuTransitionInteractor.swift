@@ -18,6 +18,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
     weak var centerController: (UIViewController & LMCSideMenuCenterControllerProtocol)?
     internal weak var presentationContextController: UIViewController?
 
+    var menuWidth: CGFloat = MenuHelper.menuWidth
     var menuPosition: SideMenuPosition = .left
 
     private var shouldDismissMenu: Bool {
