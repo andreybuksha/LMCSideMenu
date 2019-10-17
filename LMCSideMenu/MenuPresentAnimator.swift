@@ -71,7 +71,7 @@ extension MenuPresentAnimator: UIViewControllerAnimatedTransitioning {
             snapshot.frame.origin.x = contextView.frame.width
         }
         toVc.view.isHidden = true
-        if let superview = toVc.presentingViewController?.view.superview {
+        if let superview = toVc.presentingViewController?.view.superview?.superview {
             if #available(iOS 13, *) {
                 switch interactor.menuPosition {
                 case .left:
