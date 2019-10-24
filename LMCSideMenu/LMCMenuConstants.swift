@@ -6,7 +6,7 @@
 //  Copyright © 2018 letmecode. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct LMCMenuConstants {
     
