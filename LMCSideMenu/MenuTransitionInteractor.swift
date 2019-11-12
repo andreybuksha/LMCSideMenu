@@ -61,6 +61,7 @@ public class MenuTransitionInteractor: UIPercentDrivenInteractiveTransition {
 
     internal func addTapView(to containerView: UIView, wtih frame: CGRect) {
         let tapView = UIView(frame: frame)
+        tapView.tag = 1000003
         containerView.addSubview(tapView)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tapView.addGestureRecognizer(tapGestureRecognizer)
